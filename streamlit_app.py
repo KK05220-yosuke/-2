@@ -1,31 +1,47 @@
-# Streamlitライブラリをインポート
 import streamlit as st
+import matplotlib.pyplot as plt
+import numpy as np
 
-# ページ設定（タブに表示されるタイトル、表示幅）
-st.set_page_config(page_title="タイトル", layout="wide")
+# Streamlitアプリケーションのタイトルを設定
+st.title('y = x^2 の3Dプロット')
 
-# タイトルを設定
-st.title('Streamlitのサンプルアプリ')
+# 3Dプロットを作成する関数
+def plot_3d_graph():
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(111, projection='3d')
 
-# テキスト入力ボックスを作成し、ユーザーからの入力を受け取る
-user_input = st.text_input('あなたの名前を入力してください')
+    # x軸の範囲を設定（-10から10まで）
+    x = np.linspace(-10, 10, 400)
 
-# ボタンを作成し、クリックされたらメッセージを表示
-if st.button('挨拶する'):
-    if user_input:  # 名前が入力されているかチェック
-        st.success(f'🌟 こんにちは、{user_input}さん! 🌟')  # メッセージをハイライト
-    else:
-        st.error('名前を入力してください。')  # エラーメッセージを表示
+    # y = x^2 の計算
+    y_positive = x**2
+    y_negative = -x**2
 
-# スライダーを作成し、値を選択
-number = st.slider('好きな数字（10進数）を選んでください', 0, 100)
+    # y > 0 の領域をプロット
+    ax.plot(x, y_positive, zs=0, zdir='y', label='y = x^2 (y > 0)', color='b')
 
-# 補足メッセージ
-st.caption("十字キー（左右）でも調整できます。")
+    # y < 0 の領域をプロット
+    ax.plot(x, y_negative, zs=0, zdir='y', label='y = -x^2 (y < 0)', color='r')
 
-# 選択した数字を表示
-st.write(f'あなたが選んだ数字は「{number}」です。')
+    # グラフを90°傾ける
+    ax.view_init(elev=20, azim=-90)
 
-# 選択した数値を2進数に変換
-binary_representation = bin(number)[2:]  # 'bin'関数で2進数に変換し、先頭の'0b'を取り除く
-st.info(f'🔢 10進数の「{number}」を2進数で表現すると「{binary_representation}」になります。 🔢')  # 2進数の表示をハイライト
+    # x, y, z軸のラベルを設定
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+    # グラフを表示
+    plt.legend()
+    plt.tight_layout()
+    st.pyplot(fig)
+
+# アプリケーションを実行する部分
+if __name__ == '__main__':
+    plot_3d_graph()
+
+
+
+
+
+
